@@ -1,15 +1,51 @@
-main:main.o fonctions.o
-	gcc -o $@ $^
+CC = gcc
+CFLAGS = -Wall
+OUT = out
+EXEC = TP3
+DEBUG = no
+TEST = no
 
-test: maintest.o fonctions.o tests.o
-	gcc -o $@ $^
-maintest.o: main.c fonctions.h tests.h
-	gcc -DTEST -c $< -o $@
-main.o: main.c fonctions.h
-	gcc -c $<
-fonctions.o: fonctions.c fonctions.h
-	gcc -c $<
-tests.o: tests.c tests.h fonctions.h
-	gcc -c $<
+OBJDIR = obj
+SRCDIR = src
+MAINDIR = .
+
+MAIN = main
+
+SRCS= $(wildcard $(SRCDIR)/*.c)
+OBJS= $(SRCS:$(SRCDIR)/%.c=$(OUT)/$(OBJDIR)/%.o) $(OUT)/$(OBJDIR)/$(MAIN).o
+HEADER =$(wildcard $(SRCDIR)/*.h)
+
+ifeq ($(DEBUG),yes)
+	CFLAGS := $(CFLAGS) -g
+endif
+ifeq ($(TEST),yes)
+	CFLAGS := $(CFLAGS) -DTEST
+endif
+
+$(OUT)/$(EXEC):$(OBJS) $(HEADER)
+	@mkdir -p $(OUT)
+	@mkdir -p $(OUT)/$(OBJDIR)
+	$(CC) $(CFLAGS) $(OBJS) -o $@
+
+$(OUT)/$(OBJDIR)/$(MAIN).o: $(MAINDIR)/$(MAIN).c
+	@mkdir -p $(OUT)
+	@mkdir -p $(OUT)/$(OBJDIR)
+	$(CC) -o $@ -c $^ $(CFLAGS)
+
+$(OUT)/$(OBJDIR)/%.o: $(SRCDIR)/%.c $(SRCDIR)/%.h
+	@mkdir -p $(OUT)
+	@mkdir -p $(OUT)/$(OBJDIR)
+	$(CC) -o $@ -c $< $(CFLAGS)
+
+
+.PHONY: clean mrproper run
+
 clean:
-	rm -rf *.o main test
+	@rm -rf $(OUT)/$(OBJDIR)/*.o
+
+mrproper: clean
+	@rm -rf $(OUT)
+
+run: $(OUT)/$(EXEC)
+	@./$(OUT)/$(EXEC)
+
