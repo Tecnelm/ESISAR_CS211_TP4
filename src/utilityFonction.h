@@ -15,7 +15,7 @@ int isInsideTable (char c, const char *table, int table_size);
 
 void print_binary_char (char character, char lastchar);
 
-int convert_String_hexa (const char *string);
+int convert_String_hexa (const char *string);//
 
 void resetBuffer ();
 
