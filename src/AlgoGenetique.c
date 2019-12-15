@@ -215,10 +215,11 @@ void reproduction (Groupe *population, Groupe *parents) {
 	srand( time(NULL));
 
 	char betweenchar;
-	char crossingPoint;
-	char idParentOne;
-	char idParentTwo;
-	unsigned char tempGen;
+	int crossingPoint;
+	int idParentOne;
+	int idParentTwo;
+	char tempGen;
+
 
 	for (int i = 0; i < NBPOPULATION; i++) {
 		betweenchar = rand() % 2;
@@ -229,7 +230,7 @@ void reproduction (Groupe *population, Groupe *parents) {
 		while (idParentOne == idParentTwo) idParentTwo = rand() % NBPARENTS;
 		if (betweenchar) {
 			for (int g = 0; g < crossingPoint; g++) {
-				population->membres[i].gene[g] = (char)parents->membres[idParentOne].gene[g];
+				(population->membres[i]).gene[g] = (char)parents->membres[idParentOne].gene[g];
 
 			}
 			for (int g = crossingPoint; g < NBGENE / 2; g++) {
@@ -237,15 +238,15 @@ void reproduction (Groupe *population, Groupe *parents) {
 			}
 		}
 		else {
-			tempGen = (char)(parents->membres[idParentOne].gene[crossingPoint] & 0xF0) +(char) (parents->membres[idParentTwo].gene[crossingPoint] & 0x0F);
+			tempGen = (char)(parents->membres[idParentOne].gene[crossingPoint] & 0xF0) | (char) (parents->membres[idParentTwo].gene[crossingPoint] & 0x0F);
 			population->membres[i].gene[crossingPoint] = (char)tempGen;
 
 			for (int g = 0; g < crossingPoint; g++) {
-				population->membres[i].gene[g] = (char)parents->membres[idParentOne].gene[g];
+				population->membres[i].gene[g] = (char)(parents->membres[idParentOne].gene[g]);
 
 			}
 			for (int g = crossingPoint + 1; g < NBGENE / 2; g++) {
-				population->membres[i].gene[g] =(char) parents->membres[idParentTwo].gene[g];
+				population->membres[i].gene[g] =(char) (parents->membres[idParentTwo].gene[g]);
 			}
 		}
 	}
@@ -260,7 +261,7 @@ void mutation (Groupe *population) {
 	for (int i = 0; i < population->nombre; i++) {
 		randnum = rand() % 101;
 		if (randnum <= MUTATEGEN) {
-			positiongen = rand() % (NBGENE / 2);
+			positiongen = rand() % (NBGENE / 2) ;
 			newgen = rand() % 256;
 			population->membres[i].gene[positiongen] = (char)newgen;
 		}
