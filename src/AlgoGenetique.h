@@ -32,7 +32,9 @@ typedef struct {
 } Groupe;
 #endif
 
-void affiche (unsigned char *gene);
+#ifndef ESISAR_CS211_TP4_ALGOGENETIQUE_H
+#define ESISAR_CS211_TP4_ALGOGENETIQUE_H
+void affiche (unsigned const char *gene);
 
 void calcul (Serpent *g);
 
@@ -49,13 +51,14 @@ void mutation (Groupe *population);
 void testCalcul ();
 
 
-void fillOpe (int *operande, int *operator, unsigned char *gene);
+void fillOpe (int *operande, int *operator, unsigned const char *gene);
 
 int calculScore (int *operator, int *operande);
 
 
-int getfirstOperandID (int *operande, int theoricalFirst);
+int getfirstOperandID (int const *operande, int const theoricalFirst);
 
-int getSecondOperandID (int *operande, int theoricalSecond);
+int getSecondOperandID (int const *operande, int const theoricalSecond);
 
-void affcalcul (int *operande, int *operator);
+void affcalcul (int const *operande, int const *operator);
+#endif

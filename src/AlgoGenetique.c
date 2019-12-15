@@ -10,13 +10,13 @@
 #define lire(gene, i)    (i%2)?(gene[i/2]&0xF):(gene[i/2]>>4);
 
 
-void affiche (unsigned char *gene) {
+void affiche (unsigned const char *gene) {
 
 	char code[] = "+-*/";
 	int i = 0, res;
 	// the last gene is useless 
 	while (i < (NBGENE - 1)) {
-		res = lire(gene, i);
+		res =(int) lire(gene, i);
 		if (i % 2) {
 			printf("%c ", code[res % 4]);
 		}
@@ -47,7 +47,7 @@ void calcul (Serpent *g) {
 	free(operator);
 }
 
-void affcalcul (int *operande, int *operator) {
+void affcalcul (int const *operande, int const *operator) {
 
 	char code[] = "+-*/";
 	int a;
@@ -108,7 +108,7 @@ int calculScore (int *operator, int *operande) {
 
 }
 
-int getfirstOperandID (int *operande, int theoricalFirst) {
+int getfirstOperandID (int const *operande, int const theoricalFirst) {
 
 	int id = theoricalFirst;
 	while (operande[id] == -1 && id != 0) {
@@ -117,7 +117,7 @@ int getfirstOperandID (int *operande, int theoricalFirst) {
 	return id;
 }
 
-int getSecondOperandID (int *operande, int theoricalSecond) {
+int getSecondOperandID (int const *operande, int const theoricalSecond) {
 
 	int id = theoricalSecond;
 
@@ -127,14 +127,14 @@ int getSecondOperandID (int *operande, int theoricalSecond) {
 	return id;
 }
 
-void fillOpe (int *operande, int *operator, unsigned char *gene) {
+void fillOpe (int *operande, int *operator, unsigned const char *gene) {
 
 	int i = 0, res;
 	int operandeID = 0;
 	int operatorID = 0;
 
 	while (i < (NBGENE - 1)) {
-		res = lire(gene, i);
+		res =(int) lire(gene, i);
 		if (i % 2) {
 			operator[operatorID++] = res % 4;
 		}
@@ -175,12 +175,9 @@ void selection (Groupe *population, Groupe *parents) {
 
 	int nbParent;
 	sort(population);
-	if (NBPOPULATION <= NBPARENTS) {
-		nbParent = NBPOPULATION;
-	}
-	else {
-		nbParent = NBPARENTS;
-	}
+
+	nbParent = NBPARENTS;
+
 
 	for (int i = 0; i < nbParent; i++) {
 		parents->membres[i] = population->membres[i];
@@ -232,23 +229,23 @@ void reproduction (Groupe *population, Groupe *parents) {
 		while (idParentOne == idParentTwo) idParentTwo = rand() % NBPARENTS;
 		if (betweenchar) {
 			for (int g = 0; g < crossingPoint; g++) {
-				population->membres[i].gene[g] = parents->membres[idParentOne].gene[g];
+				population->membres[i].gene[g] = (char)parents->membres[idParentOne].gene[g];
 
 			}
 			for (int g = crossingPoint; g < NBGENE / 2; g++) {
-				population->membres[i].gene[g] = parents->membres[idParentTwo].gene[g];
+				population->membres[i].gene[g] =(char) parents->membres[idParentTwo].gene[g];
 			}
 		}
 		else {
-			tempGen = (parents->membres[idParentOne].gene[crossingPoint] & 0xF0) + (parents->membres[idParentTwo].gene[crossingPoint] & 0x0F);
-			population->membres[i].gene[crossingPoint] = tempGen;
+			tempGen = (char)(parents->membres[idParentOne].gene[crossingPoint] & 0xF0) +(char) (parents->membres[idParentTwo].gene[crossingPoint] & 0x0F);
+			population->membres[i].gene[crossingPoint] = (char)tempGen;
 
 			for (int g = 0; g < crossingPoint; g++) {
-				population->membres[i].gene[g] = parents->membres[idParentOne].gene[g];
+				population->membres[i].gene[g] = (char)parents->membres[idParentOne].gene[g];
 
 			}
 			for (int g = crossingPoint + 1; g < NBGENE / 2; g++) {
-				population->membres[i].gene[g] = parents->membres[idParentTwo].gene[g];
+				population->membres[i].gene[g] =(char) parents->membres[idParentTwo].gene[g];
 			}
 		}
 	}
@@ -265,7 +262,7 @@ void mutation (Groupe *population) {
 		if (randnum <= MUTATEGEN) {
 			positiongen = rand() % (NBGENE / 2);
 			newgen = rand() % 256;
-			population->membres[i].gene[positiongen] = newgen;
+			population->membres[i].gene[positiongen] = (char)newgen;
 		}
 	}
 }
