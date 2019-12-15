@@ -16,7 +16,7 @@ void affiche (unsigned const char *gene) {
 	int i = 0, res;
 	// the last gene is useless 
 	while (i < (NBGENE - 1)) {
-		res =(int) lire(gene, i);
+		res = (int) lire(gene, i);
 		if (i % 2) {
 			printf("%c ", code[res % 4]);
 		}
@@ -40,8 +40,9 @@ void calcul (Serpent *g) {
 
 	//affiche(g->gene);
 	g->score = calculScore(operator, operande);
-	if(g->score == 0)
-		g->score =0;
+	if (g->score == 0) {
+		g->score = 0;
+	}
 
 	free(operande);
 	free(operator);
@@ -134,7 +135,7 @@ void fillOpe (int *operande, int *operator, unsigned const char *gene) {
 	int operatorID = 0;
 
 	while (i < (NBGENE - 1)) {
-		res =(int) lire(gene, i);
+		res = (int) lire(gene, i);
 		if (i % 2) {
 			operator[operatorID++] = res % 4;
 		}
@@ -212,7 +213,8 @@ void generationAleatoire (Groupe *population) {
 }
 
 void reproduction (Groupe *population, Groupe *parents) {
-	srand( time(NULL));
+
+	srand(time(NULL));
 
 	char betweenchar;
 	int crossingPoint;
@@ -230,40 +232,41 @@ void reproduction (Groupe *population, Groupe *parents) {
 		while (idParentOne == idParentTwo) idParentTwo = rand() % NBPARENTS;
 		if (betweenchar) {
 			for (int g = 0; g < crossingPoint; g++) {
-				(population->membres[i]).gene[g] = (char)parents->membres[idParentOne].gene[g];
+				(population->membres[i]).gene[g] = (char) parents->membres[idParentOne].gene[g];
 
 			}
 			for (int g = crossingPoint; g < NBGENE / 2; g++) {
-				population->membres[i].gene[g] =(char) parents->membres[idParentTwo].gene[g];
+				population->membres[i].gene[g] = (char) parents->membres[idParentTwo].gene[g];
 			}
 		}
 		else {
-			tempGen = (char)(parents->membres[idParentOne].gene[crossingPoint] & 0xF0) | (char) (parents->membres[idParentTwo].gene[crossingPoint] & 0x0F);
-			population->membres[i].gene[crossingPoint] = (char)tempGen;
+			tempGen = (char) (parents->membres[idParentOne].gene[crossingPoint] & 0xF0) | (char) (parents->membres[idParentTwo].gene[crossingPoint] & 0x0F);
+			population->membres[i].gene[crossingPoint] = (char) tempGen;
 
 			for (int g = 0; g < crossingPoint; g++) {
-				population->membres[i].gene[g] = (char)(parents->membres[idParentOne].gene[g]);
+				population->membres[i].gene[g] = (char) (parents->membres[idParentOne].gene[g]);
 
 			}
 			for (int g = crossingPoint + 1; g < NBGENE / 2; g++) {
-				population->membres[i].gene[g] =(char) (parents->membres[idParentTwo].gene[g]);
+				population->membres[i].gene[g] = (char) (parents->membres[idParentTwo].gene[g]);
 			}
 		}
 	}
 }
 
 void mutation (Groupe *population) {
+
 	int randnum;
 	int positiongen;
 	unsigned char newgen;
 
-	srand( time(NULL));
+	srand(time(NULL));
 	for (int i = 0; i < population->nombre; i++) {
 		randnum = rand() % 101;
 		if (randnum <= MUTATEGEN) {
-			positiongen = rand() % (NBGENE / 2) ;
+			positiongen = rand() % (NBGENE / 2);
 			newgen = rand() % 256;
-			population->membres[i].gene[positiongen] = (char)newgen;
+			population->membres[i].gene[positiongen] = (char) newgen;
 		}
 	}
 }

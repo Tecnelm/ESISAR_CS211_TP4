@@ -1,9 +1,9 @@
 #ifndef NBPOPULATION
-#define NBPOPULATION 1000
+#define NBPOPULATION 500
 #endif
 
 #ifndef NBPARENTS
-#define NBPARENTS 10
+#define NBPARENTS 100
 #endif
 
 #define MAX 2000000
@@ -14,10 +14,11 @@
 #endif
 
 #ifndef MUTATEGEN
-#define MUTATEGEN 10
+#define MUTATEGEN 20
 #endif
 
 #include "sortFonction.h"
+
 
 #ifndef SERPENT
 #define SERPENT

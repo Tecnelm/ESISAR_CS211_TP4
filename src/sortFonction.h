@@ -9,7 +9,11 @@
 #include <stdlib.h>
 #include "AlgoGenetique.h"
 
-void sort(Groupe* population);
-void merge (Serpent* tab, Serpent* tmp, int left, int mid, int right, int* cnt);
-void mergeSort (Serpent* tab,Serpent* tmp, int left, int right, int* cnt);
+
+void sort (Groupe *population);
+
+void merge (Serpent *tab, Serpent *tmp, int left, int mid, int right, int *cnt);
+
+void mergeSort (Serpent *tab, Serpent *tmp, int left, int right, int *cnt);
+
 #endif //ESISAR_CS211_TP4_SORTFONCTION_H
