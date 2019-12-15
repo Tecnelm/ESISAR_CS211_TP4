@@ -4,8 +4,10 @@
 #include <string.h> 
 #include <unistd.h> 
 #include "src/AlgoGenetique.h"
+#define TEST
 
 
+#ifndef TEST
 int main(int argc, char *argv[]) 
 {	
 	int opt,nbgeneration=0;
@@ -31,8 +33,8 @@ int main(int argc, char *argv[])
 	// test et allocation mémoire. 
 	if (parents.nombre > population.nombre) exit(EXIT_FAILURE);  
 
-	if ((population.membres=malloc(sizeof(serpent)*population.nombre)) == NULL ) exit(EXIT_FAILURE);
-	if ((parents.membres=malloc(sizeof(serpent)*parents.nombre)) == NULL ) exit(EXIT_FAILURE);
+	if ((population.membres=malloc(sizeof(Serpent)*population.nombre)) == NULL ) exit(EXIT_FAILURE);
+	if ((parents.membres=malloc(sizeof(Serpent)*parents.nombre)) == NULL ) exit(EXIT_FAILURE);
 
 	// creation de la premiere génération 
 	generationAleatoire(&population);
@@ -48,4 +50,10 @@ int main(int argc, char *argv[])
 	free(parents.membres); 
 
 }
+#else
+int main(int argc, char *argv[])
+{
+	testCalcul();
+}
+#endif
 

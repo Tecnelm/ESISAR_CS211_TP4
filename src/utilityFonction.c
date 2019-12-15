@@ -54,7 +54,7 @@ int convert_String_hexa (const char *string) { /// convert a char*, format in HE
 	int value;
 	unsigned int index;
 
-	for (index = 0; index < stringlen; index++) {
+	for (index = 2; index < stringlen; index++) {
 		result *= 16;
 		switch (string[index]) {
 			case '0':value = 0;
