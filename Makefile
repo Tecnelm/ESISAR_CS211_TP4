@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -Wall
 OUT = out
 EXEC = TP3
-DEBUG = no
+DEBUG = yes
 TEST = no
 
 OBJDIR = obj

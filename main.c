@@ -3,7 +3,7 @@
 #include <strings.h> 
 #include <string.h> 
 #include <unistd.h> 
-#include "AlgoGenetique.h" 
+#include "src/AlgoGenetique.h"
 
 
 int main(int argc, char *argv[]) 
