@@ -1,7 +1,7 @@
 CC = gcc
-CFLAGS = -Wall
+CFLAGS = -Wall -lm
 OUT = out
-EXEC = TP3
+EXEC = TP4
 DEBUG = yes
 TEST = no
 

@@ -20,6 +20,7 @@
 #include "sortFonction.h"
 
 
+
 #ifndef SERPENT
 #define SERPENT
 typedef struct {
@@ -35,6 +36,7 @@ typedef struct {
 
 #ifndef ESISAR_CS211_TP4_ALGOGENETIQUE_H
 #define ESISAR_CS211_TP4_ALGOGENETIQUE_H
+#include <math.h>
 void affiche (unsigned const char *gene);
 
 void calcul (Serpent *g);
