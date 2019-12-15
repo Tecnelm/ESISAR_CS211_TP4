@@ -97,6 +97,7 @@ int convert_String_hexa (const char *string) { /// convert a char*, format in HE
 }
 
 void resetBuffer () {
+
 	int c;
 	while ((c = getchar()) != EOF && c != '\n');
 }

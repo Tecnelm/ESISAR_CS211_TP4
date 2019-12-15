@@ -44,17 +44,17 @@ void calcul (Serpent *g) {
 	free(operator);
 }
 
-void affcalcul(int * operande , int * operator)
-{
+void affcalcul (int *operande, int *operator) {
+
 	char code[] = "+-*/";
 	int a;
-	for(int i = 0 ; i <NBGENE /2 -1 ; i++)
-	{
+	for (int i = 0; i < NBGENE / 2 - 1; i++) {
 		a = operande[i] == -1 ? 0 : operande[i];
-		printf("%d %c ",a,code[operator[i]]);
+		printf("%d %c ", a, code[operator[i]]);
 	}
-	printf("%d \n",operande[NBGENE/2-1]);
+	printf("%d \n", operande[NBGENE / 2 - 1]);
 }
+
 int calculScore (int *operator, int *operande) {
 
 	int number1;
@@ -62,12 +62,12 @@ int calculScore (int *operator, int *operande) {
 	int idOperande1, idOperande2;
 	int result = 0;
 
-	affcalcul(operande,operator);
+	affcalcul(operande, operator);
 
 	for (int i = 0; i < NBGENE / 2 - 1; i++) {
 		if (operator[i] == 2 || operator[i] == 3) {
-			idOperande1 = getfirstOperandID(operande,i);
-			idOperande2 = getSecondOperandID(operande,i+1);
+			idOperande1 = getfirstOperandID(operande, i);
+			idOperande2 = getSecondOperandID(operande, i + 1);
 			number1 = operande[idOperande1];
 			number2 = operande[idOperande2];
 			switch (operator[i]) {
@@ -84,16 +84,15 @@ int calculScore (int *operator, int *operande) {
 					operator[i] = 0;
 					break;
 			}
-			affcalcul(operande,operator);
-
+			affcalcul(operande, operator);
 
 		}
 	}
 
-	result = operande[0] ==-1 ? 0 : operande[0];
+	result = operande[0] == -1 ? 0 : operande[0];
 	for (int i = 0; i < NBGENE / 2 - 1; i++) {
-		idOperande1 = i+1;
-		number1 = operande[idOperande1] ==-1 ? 0 : operande[idOperande1];
+		idOperande1 = i + 1;
+		number1 = operande[idOperande1] == -1 ? 0 : operande[idOperande1];
 
 		switch (operator[i]) {
 			case 0:result += (number1);
@@ -102,25 +101,24 @@ int calculScore (int *operator, int *operande) {
 				break;
 		}
 	}
-	return abs(result -666);
+	return abs(result - 666);
 
 }
 
-int getfirstOperandID(int* operande, int theoricalFirst)
-{
+int getfirstOperandID (int *operande, int theoricalFirst) {
+
 	int id = theoricalFirst;
-	while(operande[id] == -1 && id !=0)
-	{
+	while (operande[id] == -1 && id != 0) {
 		id--;
 	}
 	return id;
 }
-int getSecondOperandID(int *operande, int theoricalSecond)
-{
+
+int getSecondOperandID (int *operande, int theoricalSecond) {
+
 	int id = theoricalSecond;
 
-	while(operande[id] == -1 && id !=NBGENE/2)
-	{
+	while (operande[id] == -1 && id != NBGENE / 2) {
 		id++;
 	}
 	return id;

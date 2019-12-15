@@ -1,35 +1,37 @@
-#include <stdio.h> 
+#include <stdio.h>
 #include <stdlib.h>
-#include <strings.h> 
-#include <string.h> 
-#include <unistd.h> 
+#include <strings.h>
+#include <string.h>
+#include <unistd.h>
 #include "src/AlgoGenetique.h"
+
+
 #define TEST
 
 
 #ifndef TEST
-int main(int argc, char *argv[]) 
+int main(int argc, char *argv[])
 {	
 	int opt,nbgeneration=0;
- 	groupe population,parents; 
+	 groupe population,parents;
 
-	// les valeurs par defaut. 	
-	population.nombre=NBPOPULATION; 
-	parents.nombre=NBPARENTS; 
-	
- 	while ((opt = getopt(argc, argv, "p:P:")) != -1) {
-               switch (opt) {
-               case 'p':
-                   population.nombre=atoi(optarg);
-                   break;
-               case 'P':
-                   parents.nombre = atoi(optarg);
-                   break;
-               default: /* '?' */
-                   fprintf(stderr, "Usage: %s [-p nbpopulation] [-P nbparents] \n",argv[0]);
-                   exit(EXIT_FAILURE);
-               }
-        }
+	// les valeurs par defaut.
+	population.nombre=NBPOPULATION;
+	parents.nombre=NBPARENTS;
+
+	 while ((opt = getopt(argc, argv, "p:P:")) != -1) {
+			   switch (opt) {
+			   case 'p':
+				   population.nombre=atoi(optarg);
+				   break;
+			   case 'P':
+				   parents.nombre = atoi(optarg);
+				   break;
+			   default: /* '?' */
+				   fprintf(stderr, "Usage: %s [-p nbpopulation] [-P nbparents] \n",argv[0]);
+				   exit(EXIT_FAILURE);
+			   }
+		}
 	// test et allocation mémoire. 
 	if (parents.nombre > population.nombre) exit(EXIT_FAILURE);  
 
@@ -51,9 +53,11 @@ int main(int argc, char *argv[])
 
 }
 #else
-int main(int argc, char *argv[])
-{
+
+int main (int argc, char *argv[]) {
+
 	testCalcul();
 }
+
 #endif
 
