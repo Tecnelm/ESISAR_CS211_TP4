@@ -20,7 +20,6 @@
 #include "sortFonction.h"
 
 
-
 #ifndef SERPENT
 #define SERPENT
 typedef struct {

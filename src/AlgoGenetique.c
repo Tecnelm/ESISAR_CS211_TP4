@@ -189,7 +189,7 @@ void selection (Groupe *population, Groupe *parents) {
 int evaluation (Groupe *population) {
 
 	int result = 1;
-	int moyValue= 0;
+	int moyValue = 0;
 	int somme = 0;
 	int ecart;
 
@@ -197,15 +197,15 @@ int evaluation (Groupe *population) {
 	for (int i = 0; i < population->nombre; i++) {
 		calcul(&(population->membres[i]));
 
-		somme +=population->membres[i].score;
+		somme += population->membres[i].score;
 		moyValue += population->membres[i].score;
 
 		if (!(population->membres[i].score)) {
 			result = 0;
 		}
 	}
-	moyValue /=population->nombre;
-	ecart = sqrt((1/population->nombre)*somme - moyValue*moyValue);
+	moyValue /= population->nombre;
+	ecart = sqrt((1 / population->nombre) * somme - moyValue * moyValue);
 
 	return result;
 }
