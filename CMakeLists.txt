@@ -10,4 +10,4 @@ file(
         src/*
 )
 
-add_executable(ESISAR_CS211_TP3 main.c ${source_files})
+add_executable(ESISAR_CS211_TP4 main.c ${source_files})

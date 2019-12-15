@@ -3,11 +3,12 @@
 #include <strings.h>
 #include <string.h>
 #include <unistd.h>
+#include <time.h>
 #include "AlgoGenetique.h"
-#include "utilityFonction.h"
 
 
 #define lire(gene, i)    (i%2)?(gene[i/2]&0xF):(gene[i/2]>>4);
+
 
 void affiche (unsigned char *gene) {
 
@@ -37,8 +38,10 @@ void calcul (Serpent *g) {
 	fillOpe(operande, operator, g->gene);
 
 
-	affiche(g->gene);
+	//affiche(g->gene);
 	g->score = calculScore(operator, operande);
+	if(g->score == 0)
+		g->score =0;
 
 	free(operande);
 	free(operator);
@@ -62,7 +65,7 @@ int calculScore (int *operator, int *operande) {
 	int idOperande1, idOperande2;
 	int result = 0;
 
-	affcalcul(operande, operator);
+	//affcalcul(operande, operator);
 
 	for (int i = 0; i < NBGENE / 2 - 1; i++) {
 		if (operator[i] == 2 || operator[i] == 3) {
@@ -84,7 +87,7 @@ int calculScore (int *operator, int *operande) {
 					operator[i] = 0;
 					break;
 			}
-			affcalcul(operande, operator);
+			//affcalcul(operande, operator);
 
 		}
 	}
@@ -168,19 +171,103 @@ void testCalcul () {
 	}
 }
 
-void selection (groupe *population, groupe *parents) {
+void selection (Groupe *population, Groupe *parents) {
+
+	int nbParent;
+	sort(population);
+	if (NBPOPULATION <= NBPARENTS) {
+		nbParent = NBPOPULATION;
+	}
+	else {
+		nbParent = NBPARENTS;
+	}
+
+	for (int i = 0; i < nbParent; i++) {
+		parents->membres[i] = population->membres[i];
+	}
+
 }
 
-int evaluation (groupe *population) {
+int evaluation (Groupe *population) {
+
+	int result = 1;
+
+	for (int i = 0; i < population->nombre; i++) {
+		calcul(&(population->membres[i]));
+
+		if (!(population->membres[i].score)) {
+			result = 0;
+		}
+	}
+	return result;
 }
 
-void generationAleatoire (groupe *population) {
+void generationAleatoire (Groupe *population) {
+
+
+	srand(time(NULL));
+
+	for (int i = 0; i < population->nombre; i++) {
+		for (int g = 0; g < NBGENE / 2; g++) {
+			(population->membres[i]).gene[g] = rand() % 256;
+		}
+	}
 }
 
-void reproduction (groupe *population, groupe *parents) {
+void reproduction (Groupe *population, Groupe *parents) {
+	srand( time(NULL));
+
+	char betweenchar;
+	char crossingPoint;
+	char idParentOne;
+	char idParentTwo;
+	unsigned char tempGen;
+
+	for (int i = 0; i < NBPOPULATION; i++) {
+		betweenchar = rand() % 2;
+		crossingPoint = rand() % (NBGENE / 2);
+
+		idParentOne = rand() % NBPARENTS;
+		idParentTwo = rand() % NBPARENTS;
+		while (idParentOne == idParentTwo) idParentTwo = rand() % NBPARENTS;
+		if (betweenchar) {
+			for (int g = 0; g < crossingPoint; g++) {
+				population->membres[i].gene[g] = parents->membres[idParentOne].gene[g];
+
+			}
+			for (int g = crossingPoint; g < NBGENE / 2; g++) {
+				population->membres[i].gene[g] = parents->membres[idParentTwo].gene[g];
+			}
+		}
+		else {
+			tempGen = (parents->membres[idParentOne].gene[crossingPoint] & 0xF0) + (parents->membres[idParentTwo].gene[crossingPoint] & 0x0F);
+			population->membres[i].gene[crossingPoint] = tempGen;
+
+			for (int g = 0; g < crossingPoint; g++) {
+				population->membres[i].gene[g] = parents->membres[idParentOne].gene[g];
+
+			}
+			for (int g = crossingPoint + 1; g < NBGENE / 2; g++) {
+				population->membres[i].gene[g] = parents->membres[idParentTwo].gene[g];
+			}
+		}
+	}
 }
 
-void mutation (groupe *population) {
+void mutation (Groupe *population) {
+	int randnum;
+	int positiongen;
+	unsigned char newgen;
+
+	srand( time(NULL));
+	for (int i = 0; i < population->nombre; i++) {
+		randnum = rand() % 101;
+		if (randnum <= MUTATEGEN) {
+			positiongen = rand() % (NBGENE / 2);
+			newgen = rand() % 256;
+			population->membres[i].gene[positiongen] = newgen;
+		}
+	}
 }
 
 

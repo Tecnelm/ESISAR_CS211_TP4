@@ -6,14 +6,14 @@
 #include "src/AlgoGenetique.h"
 
 
-#define TEST
+//#define TEST
 
 
 #ifndef TEST
 int main(int argc, char *argv[])
 {	
 	int opt,nbgeneration=0;
-	 groupe population,parents;
+	 Groupe population,parents;
 
 	// les valeurs par defaut.
 	population.nombre=NBPOPULATION;
