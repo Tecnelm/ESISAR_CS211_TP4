@@ -2,7 +2,9 @@
 #include <stdlib.h>
 #include <strings.h> 
 #include <string.h> 
-#include <unistd.h> 
+#include <unistd.h>
+#include "time.h"
+#include <arpa/nameser.h>
 #include "AlgoGenetique.h" 
 
 
@@ -26,12 +28,76 @@ void affiche(unsigned char *gene)
 
 void calcul(serpent *g)
 {
+	//--------------- traduction des operandes
+	int i=0;
+	char geneTraduit[NBGENE-1];
+	char code[]="+-*/";
+
+	for(i ; i<(NBGENE-1) ; i++){
+		if(i%2) {
+ 			geneTraduit[i] = code[(g->gene[i])&0b0011];
+		}
+		else{
+			geneTraduit[i] = g->gene[i];
+		}
+	}
+
+	//-------------- determination des delimitations de priorité
+	int j=0;
+	int k=0;
+	int tilt=1;
+	int delimitation_parenthese[NBGENE];
+
+	for(j ; j<(NBGENE-1) ; j++) {
+		if (geneTraduit[j] == "/" && geneTraduit[j + 1] == '0') {
+			g->score = MAX;
+			exit(EXIT_SUCCESS);
+		}
+		else if(j%2){
+			if(geneTraduit[j] == '*' || geneTraduit[j] == '/'){
+				if(tilt){
+					delimitation_parenthese[k] = j-2;
+					tilt = 0;
+					k++;
+				}
+			}
+			else{
+				if(!tilt){
+					delimitation_parenthese[k] = j-1;
+					tilt = 1;
+					k++;
+				}
+			}
+		}
+	}
+	delimitation_parenthese[k] = END;
+
+	//------------- somme des termes
+	int parenthese = 0;
+	int l = 0;
+	int buffer;
+	k = 0;
+
+	for(l ; l<(NBGENE-1) ; l++) {
+		if(l = delimitation_parenthese[k] || delimitation_parenthese[k] == -1){
+			parenthese = !parenthese;
+			k++;
+		}
+		if(parenthese){
+
+		}
+		else{
+
+		}
+	}
+
+
 }
 
 
-void testCalcul() 
+void testCalcul()
 {
-int i,expect; 
+int i,expect;
 serpent test[]={
 	{"\x67\xc6\x69\x73\x51\xff\x4a\xec\x29\xcd\xba\xab\xf2\xfb\xe3\x46\x7c\xc2\x54\xf8\x1b\xe8\xe7\x8d\x76\x5a\x2e\x63\x33\x9f\xc9\x9a",660},
 	{"\x66\x32\x0d\xb7\x31\x58\xa3\x5a\x25\x5d\x05\x17\x58\xe9\x5e\xd4\xab\xb2\xcd\xc6\x9b\xb4\x54\x11\x0e\x82\x74\x41\x21\x3d\xdc\x87",735},
@@ -44,12 +110,12 @@ serpent test[]={
 	{"\x08\x70\xd4\xb2\x8a\x29\x54\x48\x9a\x0a\xbc\xd5\x0e\x18\xa8\x44\xac\x5b\xf3\x8e\x4c\xd7\x2d\x9b\x09\x42\xe5\x06\xc4\x33\xaf\xcd",MAX},
 	{"\xa3\x84\x7f\x2d\xad\xd4\x76\x47\xde\x32\x1c\xec\x4a\xc4\x30\xf6\x20\x23\x85\x6c\xfb\xb2\x07\x04\xf4\xec\x0b\xb9\x20\xba\x86\xc3",MAX},
 	{"\x3e\x05\xf1\xec\xd9\x67\x33\xb7\x99\x50\xa3\xe3\x14\xd3\xd9\x34\xf7\x5e\xa0\xf2\x10\xa8\xf6\x05\x94\x01\xbe\xb4\xbc\x44\x78\xfa",727}
-	}; 
+	};
 
 	for(i=0;i<sizeof(test)/sizeof(serpent);i++) {
-		expect=test[i].score; 
+		expect=test[i].score;
 		calcul(&test[i]);
-		if (expect != test[i].score) printf("error\n");  
+		if (expect != test[i].score) printf("error\n");
 	}
 }
 
@@ -63,6 +129,14 @@ int evaluation(groupe *population)
 
 void generationAleatoire(groupe *population)
 {
+	int i=0,j=0;
+	srand(time(NULL));
+
+	for( i; i<population->nombre; i++){
+		for( j; j<(NBGENE-1); j++){
+			(population->membres[i]).gene[j] = rand() % 16;
+		}
+	}
 }
 
 void reproduction(groupe *population,groupe *parents)

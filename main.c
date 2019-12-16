@@ -3,7 +3,7 @@
 #include <strings.h> 
 #include <string.h> 
 #include <unistd.h> 
-#include "AlgoGenetique.h" 
+#include "src/AlgoGenetique.h"
 
 
 int main(int argc, char *argv[]) 
@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
                case 'P':
                    parents.nombre = atoi(optarg);
                    break;
-               default: /* '?' */
+               default:
                    fprintf(stderr, "Usage: %s [-p nbpopulation] [-P nbparents] \n",argv[0]);
                    exit(EXIT_FAILURE);
                }
@@ -36,6 +36,7 @@ int main(int argc, char *argv[])
 
 	// creation de la premiere génération 
 	generationAleatoire(&population);
+	calcul(&(population.membres[0]));
  
 	while (evaluation(&population)) {
 		selection(&population,&parents); 
@@ -45,7 +46,9 @@ int main(int argc, char *argv[])
 	}
 	printf("Generation %d\n",nbgeneration);  
 	free(population.membres); 
-	free(parents.membres); 
+	free(parents.membres);
+
+
 
 }
 

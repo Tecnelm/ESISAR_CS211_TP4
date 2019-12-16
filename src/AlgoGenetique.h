@@ -11,7 +11,9 @@
 
 #ifndef NBGENE
 #define NBGENE 64
-#endif 
+#endif
+
+#define END 666
 
 typedef struct {
 	unsigned char gene[NBGENE/2];  
