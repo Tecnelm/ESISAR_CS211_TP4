@@ -49,14 +49,10 @@ void calcul(serpent *g)
 	int delimitation_parenthese[NBGENE];
 
 	for(j ; j<(NBGENE-1) ; j++) {
-		if (geneTraduit[j] == "/" && geneTraduit[j + 1] == '0') {
-			g->score = MAX;
-			exit(EXIT_SUCCESS);
-		}
-		else if(j%2){
+		if(j%2){
 			if(geneTraduit[j] == '*' || geneTraduit[j] == '/'){
 				if(tilt){
-					delimitation_parenthese[k] = j-2;
+					delimitation_parenthese[k] = j-1;
 					tilt = 0;
 					k++;
 				}
@@ -75,23 +71,52 @@ void calcul(serpent *g)
 	//------------- somme des termes
 	int parenthese = 0;
 	int l = 0;
-	int buffer;
+	int indexParenthese;
+	int nbTermeParenthese;
+	int buffer = 0;
+	g->score = 0;
 	k = 0;
 
-	for(l ; l<(NBGENE-1) ; l++) {
-		if(l = delimitation_parenthese[k] || delimitation_parenthese[k] == -1){
-			parenthese = !parenthese;
+
+	for(l ; l < (NBGENE-1) ; l++) {
+		if(l == delimitation_parenthese[k] && !parenthese && delimitation_parenthese[k]!= END){
+			parenthese = 1;
 			k++;
 		}
 		if(parenthese){
+			nbTermeParenthese = delimitation_parenthese[k]-delimitation_parenthese[k-1];
+			buffer = geneTraduit[delimitation_parenthese[k-1]];
 
+			for(indexParenthese = delimitation_parenthese[k-1]; indexParenthese < delimitation_parenthese[k]; indexParenthese++){
+				if(indexParenthese%2 == 1){
+					if(geneTraduit[indexParenthese] == '*'){
+						buffer = buffer * geneTraduit[indexParenthese+1];
+					}
+					else if(geneTraduit[indexParenthese] == '/' && geneTraduit[indexParenthese+1] != 0){
+						buffer = buffer / geneTraduit[indexParenthese+1];
+					}
+					else{
+						g->score = MAX;
+						exit(EXIT_SUCCESS);
+					}
+				}
+			}
+			if(geneTraduit[delimitation_parenthese[k-1]-1] == '-')
+				g->score = g->score - buffer;
+			else
+				g->score = g->score + buffer;
+			buffer = 0;
+			l = l + (nbTermeParenthese-1);
+			parenthese = 0;
+			k++;
 		}
-		else{
-
+		else if(l%2 == 0 && geneTraduit[l-1] != '/' && geneTraduit[l-1] != '*'){
+			if(geneTraduit[l-1] == '-')
+				g->score = g->score - geneTraduit[l];
+			else
+				g->score = g->score + geneTraduit[l];
 		}
 	}
-
-
 }
 
 
@@ -125,6 +150,7 @@ void selection(groupe *population,groupe *parents)
 
 int evaluation(groupe *population) 
 {
+
 }
 
 void generationAleatoire(groupe *population)

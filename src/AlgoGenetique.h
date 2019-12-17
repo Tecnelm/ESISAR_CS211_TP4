@@ -16,7 +16,7 @@
 #define END 666
 
 typedef struct {
-	unsigned char gene[NBGENE/2];  
+	unsigned char gene[NBGENE];
 	int score; 
 } serpent; 
 
