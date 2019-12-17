@@ -79,7 +79,7 @@ void calcul(serpent *g)
 
 
 	for(l ; l < (NBGENE-1) ; l++) {
-		if(l == delimitation_parenthese[k] && !parenthese && delimitation_parenthese[k]!= END){
+		if(l == delimitation_parenthese[k] && !parenthese && delimitation_parenthese[k+1]!= END){
 			parenthese = 1;
 			k++;
 		}
@@ -117,6 +117,8 @@ void calcul(serpent *g)
 				g->score = g->score + geneTraduit[l];
 		}
 	}
+	g->score = abs(g->score - 666);
+	g->score = 1;
 }
 
 
@@ -150,7 +152,13 @@ void selection(groupe *population,groupe *parents)
 
 int evaluation(groupe *population) 
 {
-
+	int i;
+	for (i = 0; i < population->nombre; ++i) {
+		if(((population->membres)->score) == 0){
+			return 0;
+		}
+	}
+	return 1;
 }
 
 void generationAleatoire(groupe *population)
