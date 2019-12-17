@@ -33,6 +33,7 @@ void selection(groupe *population,groupe *parents);
 int evaluation(groupe *population); 
 void generationAleatoire(groupe *population); 
 void reproduction(groupe *population,groupe *parents); 
-void mutation (groupe *population); 
+void mutation (groupe *population);
+void insertionSort (int *table, int size);
 
 
