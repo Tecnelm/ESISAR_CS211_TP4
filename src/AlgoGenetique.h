@@ -3,7 +3,7 @@
 #endif
 
 #ifndef NBPARENTS
-#define NBPARENTS 100
+#define NBPARENTS 50
 #endif
 
 #define MAX 2000000
@@ -14,7 +14,7 @@
 #endif
 
 #ifndef MUTATEGEN
-#define MUTATEGEN 20
+#define MUTATEGEN 5
 #endif
 
 #include "sortFonction.h"

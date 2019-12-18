@@ -15,6 +15,7 @@ SRCS= $(wildcard $(SRCDIR)/*.c)
 OBJS= $(SRCS:$(SRCDIR)/%.c=$(OUT)/$(OBJDIR)/%.o) $(OUT)/$(OBJDIR)/$(MAIN).o
 HEADER =$(wildcard $(SRCDIR)/*.h)
 
+
 ifeq ($(DEBUG),yes)
 	CFLAGS := $(CFLAGS) -g
 endif

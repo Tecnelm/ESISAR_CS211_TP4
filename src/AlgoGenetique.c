@@ -18,48 +18,46 @@ void affiche (unsigned const char *gene) {
 	while (i < (NBGENE - 1)) {
 		res = (int) lire(gene, i);
 		if (i % 2) {
-			printf("%c ", code[res % 4]);
+			printf("%c ", code[res % 4]); ///affiche l'operande
 		}
 		else {
-			printf("0x%x ", res);
+			printf("0x%x ", res); /// affiche le nombre en binaire
 		}
 		i = i + 1;
 	}
 	printf("\n");
 }
 
-void calcul (Serpent *g) {
+void calcul (Serpent *g) { /// cette fonction est la fontion de calcul elle permet de calculer le score d'un serpent en parametre
 
-	int *operande, *operator;
-	if ((operande = malloc(sizeof(int) * NBGENE)) == NULL) { exit(EXIT_FAILURE); }
-	if ((operator = malloc(sizeof(int) * NBGENE - 1)) == NULL) { exit(EXIT_FAILURE); }
+	int *operande, *operator; /// ces listes permettent de stocker les operateur et operande separement
+
+	if ((operande = malloc(sizeof(int) * NBGENE/2)) == NULL) { exit(EXIT_FAILURE); } ///allocation des tableau pour les operateurs et les operanrande
+	if ((operator = malloc(sizeof(int) * NBGENE/2 - 1)) == NULL) { exit(EXIT_FAILURE); }
 
 
-	fillOpe(operande, operator, g->gene);
+	fillOpe(operande, operator, g->gene); ///remplis les tableaux precedent
 
 
 	//affiche(g->gene);
-	g->score = calculScore(operator, operande);
-	if (g->score == 0) {
-		g->score = 0;
-	}
+	g->score = calculScore(operator, operande); /// affecte le score calcule
 
 	free(operande);
 	free(operator);
 }
 
-void affcalcul (int const *operande, int const *operator) {
+void affcalcul (int const *operande, int const *operator) { /// fonction de debug elle permet d'afficher le tableau operateur et operande de maniere ordonne
 
 	char code[] = "+-*/";
 	int a;
 	for (int i = 0; i < NBGENE / 2 - 1; i++) {
-		a = operande[i] == -1 ? 0 : operande[i];
+		a = operande[i] == -1 ? 0 : operande[i]; /// dans la fonction de calcule les operande "absent sont considere au calcul comme des valeurs 0 mais vale -1
 		printf("%d %c ", a, code[operator[i]]);
 	}
 	printf("%d \n", operande[NBGENE / 2 - 1]);
 }
 
-int calculScore (int *operator, int *operande) {
+int calculScore (int *operator, int *operande) {/// fonction de calcul du score avec les priorites
 
 	int number1;
 	int number2;
@@ -68,20 +66,20 @@ int calculScore (int *operator, int *operande) {
 
 	//affcalcul(operande, operator);
 
-	for (int i = 0; i < NBGENE / 2 - 1; i++) {
-		if (operator[i] == 2 || operator[i] == 3) {
-			idOperande1 = getfirstOperandID(operande, i);
+	for (int i = 0; i < NBGENE / 2 - 1; i++) {///calcul de droite a gauche les operation contenant des * ou des /
+		if (operator[i] == 2 || operator[i] == 3) { /// regarde si ce sont les bon operateur
+			idOperande1 = getfirstOperandID(operande, i);///recupere les id des operande de gauche et de droite
 			idOperande2 = getSecondOperandID(operande, i + 1);
-			number1 = operande[idOperande1];
+			number1 = operande[idOperande1]; /// valeur  des operande
 			number2 = operande[idOperande2];
 			switch (operator[i]) {
 				case 3:
-					if (number2 == 0) {
+					if (number2 == 0) {/// dans le cas d'une division par 0
 						return MAX;
 					}
-					operande[idOperande1] = number1 / number2;
-					operande[idOperande2] = -1;
-					operator[i] = 0;
+					operande[idOperande1] = number1 / number2;/// effectue le calcul et affect a l'operande de gauche
+					operande[idOperande2] = -1; ///suprime la valeur de l'operande de droite en y mettant la valeur -1 (valeur pas possible a atteindre par un gene dans un calcule
+					operator[i] = 0;/// remplace l'operateur actuel par un +
 					break;
 				case 2: operande[idOperande1] = number1 * number2;
 					operande[idOperande2] = -1;
@@ -93,22 +91,30 @@ int calculScore (int *operator, int *operande) {
 		}
 	}
 
-	result = operande[0] == -1 ? 0 : operande[0];
-	for (int i = 0; i < NBGENE / 2 - 1; i++) {
+	result = operande[0] == -1 ? 0 : operande[0];/// recupere la valeur de la case 1
+	for (int i = 0; i < NBGENE / 2 - 1; i++) {///effectue l'addition ou soustraction du tableau
 		idOperande1 = i + 1;
-		number1 = operande[idOperande1] == -1 ? 0 : operande[idOperande1];
+		number1 = operande[idOperande1] == -1 ? 0 : operande[idOperande1];/// dans le cas d'un operateur supprime la valeur est -1 ou la remet a 0 l'operande neutre
 
 		switch (operator[i]) {
-			case 0:result += (number1);
+			case 0:result += (number1);///additionne ou soustrait le nombre
 				break;
 			case 1: result -= (number1);
 				break;
 		}
 	}
-	return abs(result - 666);
+	return abs(result - 666); ///retour du score
 
 }
 
+/**
+ * les fonction suivante permette de calculer la valeur du prochain operande  celui de droite ou de gauche
+ * dans le cas ou l'operande theorique est  -1 il  decale ID vers la droite ou la gauche pour avoir un id valide pour le calcul
+ *
+ * @param operande
+ * @param theoricalFirst
+ * @return
+ */
 int getfirstOperandID (int const *operande, int const theoricalFirst) {
 
 	int id = theoricalFirst;
@@ -128,6 +134,7 @@ int getSecondOperandID (int const *operande, int const theoricalSecond) {
 	return id;
 }
 
+///cette fonction permet de remplir les tableau des operateur et des operande
 void fillOpe (int *operande, int *operator, unsigned const char *gene) {
 
 	int i = 0, res;
@@ -171,21 +178,34 @@ void testCalcul () {
 		if (expect != test[i].score) { printf("error\n"); }
 	}
 }
-
+/**
+ * selection des meilleurs parents
+ * on realise le trie de la population a l'aide d'un algorithme mergeSort puis rempli dans le tableau les meilleurs parents possible
+ * @param population
+ * @param parents
+ */
 void selection (Groupe *population, Groupe *parents) {
 
 	int nbParent;
 	sort(population);
 
-	nbParent = NBPARENTS;
+	if(NBPARENTS >= NBPOPULATION) /// dans le cas ou il y a plus de parent possible que de population
+		nbParent = NBPARENTS;
+	else
+		nbParent = NBPOPULATION;
 
 
-	for (int i = 0; i < nbParent; i++) {
+	for (int i = 0; i < nbParent; i++) { ///affecte les parents dans leur tableau
 		parents->membres[i] = population->membres[i];
 	}
 
 }
 
+/**
+ * evaluation de la population calcul le score des serpends ainsi que la moyenne des scores l'ecart type
+ * @param population
+ * @return  0 si il y a un serpend malefique (score a 0) 1 sinon
+ */
 int evaluation (Groupe *population) {
 
 	int result = 1;
@@ -195,12 +215,12 @@ int evaluation (Groupe *population) {
 
 
 	for (int i = 0; i < population->nombre; i++) {
-		calcul(&(population->membres[i]));
+		calcul(&(population->membres[i]));/// calcul des scores
 
-		somme += population->membres[i].score;
+		somme += population->membres[i].score;/// somme tous les elements
 		moyValue += population->membres[i].score;
 
-		if (!(population->membres[i].score)) {
+		if (!(population->membres[i].score)) {/// verifie si ce n'est pas un serpent malefique
 			result = 0;
 		}
 	}
@@ -210,6 +230,10 @@ int evaluation (Groupe *population) {
 	return result;
 }
 
+/**
+ * pour chaque groupe de gene calcul d'un gene aleatoire
+ * @param population
+ */
 void generationAleatoire (Groupe *population) {
 
 
@@ -217,11 +241,16 @@ void generationAleatoire (Groupe *population) {
 
 	for (int i = 0; i < population->nombre; i++) {
 		for (int g = 0; g < NBGENE / 2; g++) {
-			(population->membres[i]).gene[g] = rand() % 256;
+			(population->membres[i]).gene[g] = rand() % 256;/// affectation du gene aleatoire
 		}
 	}
 }
 
+/**
+ * realise la reproduction entre deux parents crossing point
+ * @param population
+ * @param parents
+ */
 void reproduction (Groupe *population, Groupe *parents) {
 
 	srand(time(NULL));
@@ -234,26 +263,27 @@ void reproduction (Groupe *population, Groupe *parents) {
 
 
 	for (int i = 0; i < NBPOPULATION; i++) {
-		betweenchar = rand() % 2;
-		crossingPoint = rand() % (NBGENE / 2);
+		betweenchar = rand() % 2; /// valeur aleatoire pour savoir si le changement se fera entre deux gene ou entre deux groupe de gene
+		crossingPoint = rand() % (NBGENE / 2); /// point de changement adn parent
 
-		idParentOne = rand() % NBPARENTS;
+		idParentOne = rand() % NBPARENTS;/// recuperation des id des nouveau parent
 		idParentTwo = rand() % NBPARENTS;
-		while (idParentOne == idParentTwo) idParentTwo = rand() % NBPARENTS;
-		if (betweenchar) {
-			for (int g = 0; g < crossingPoint; g++) {
+		while (idParentOne == idParentTwo) idParentTwo = rand() % NBPARENTS;/// dans le cas de deux parents identique cherche un nouveau parents pour le deuxieme
+		if (betweenchar) {/// si entre deux groupe de char
+			for (int g = 0; g < crossingPoint; g++) {/// affecte au fils les gene du parent1  jusqu'au point de croisement
 				(population->membres[i]).gene[g] = (char) parents->membres[idParentOne].gene[g];
 
 			}
-			for (int g = crossingPoint; g < NBGENE / 2; g++) {
+			for (int g = crossingPoint; g < NBGENE / 2; g++) {/// affecte au fils les gene du parent2 du point de croisement a la fin
 				population->membres[i].gene[g] = (char) parents->membres[idParentTwo].gene[g];
 			}
 		}
 		else {
+			///calcul du gene intermediere on prend les 4 premier bit du parent 1 et les 4 dernier du parent 2 on applique un masque et fais un ou logique
 			tempGen = (char) (parents->membres[idParentOne].gene[crossingPoint] & 0xF0) | (char) (parents->membres[idParentTwo].gene[crossingPoint] & 0x0F);
-			population->membres[i].gene[crossingPoint] = (char) tempGen;
+			population->membres[i].gene[crossingPoint] = (char) tempGen;/// affecte le gene de croisement
 
-			for (int g = 0; g < crossingPoint; g++) {
+			for (int g = 0; g < crossingPoint; g++) { ///rempli les gene des parent 1 ou 2
 				population->membres[i].gene[g] = (char) (parents->membres[idParentOne].gene[g]);
 
 			}
@@ -264,6 +294,11 @@ void reproduction (Groupe *population, Groupe *parents) {
 	}
 }
 
+/**
+ * cette fonction permet de realiser des mutation aleatoire dans une population de serpent  en fonction d'une declarer dans le code
+ * @param population
+ */
+
 void mutation (Groupe *population) {
 
 	int randnum;
@@ -272,10 +307,10 @@ void mutation (Groupe *population) {
 
 	srand(time(NULL));
 	for (int i = 0; i < population->nombre; i++) {
-		randnum = rand() % 101;
-		if (randnum <= MUTATEGEN) {
-			positiongen = rand() % (NBGENE / 2);
-			newgen = rand() % 256;
+		randnum = rand() % 101;/// calcule la valeur aleatoire
+		if (randnum <= MUTATEGEN) {/// permet de savoir realiser une mutation ou non (pourcentage)
+			positiongen = rand() % (NBGENE / 2);/// calcule sur quel groupe de gene on realise la mutation
+			newgen = rand() % 256; /// calcule du nouveau gene
 			population->membres[i].gene[positiongen] = (char) newgen;
 		}
 	}
