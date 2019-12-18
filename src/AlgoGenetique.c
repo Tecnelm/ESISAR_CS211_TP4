@@ -122,7 +122,7 @@ void calcul (serpent *g) {
 			}
 		}
 	}
-	//g->score = abs(g->score - 666);
+	g->score = abs(g->score - 666);
 }
 
 
@@ -150,64 +150,95 @@ void testCalcul () {
 	}
 }
 
-void insertionSort (int *table, int size) {
+void insertionSort (int *tabPop, int *tabInd, int size) {
 
 	int index;
 	int index2;
-	int varToSort;
+	int varToSortPop, varToSortInd;
 	int nbaction = 0;
 
 	for (index = 1; index < size; index++) {
-		varToSort = *(table + index);
+		varToSortPop = *(tabPop + index);
+		varToSortInd = *(tabInd + index);
 		index2 = index;
 		nbaction++;
-		while (index2 > 0 && varToSort < table[index2 - 1]) {// programme stable grâce à l'inégalité stricte.
-			table[index2] = table[index2 - 1];
+		while (index2 > 0 && varToSortPop < tabPop[index2 - 1]) {// programme stable grâce à l'inégalité stricte.
+			tabPop[index2] = tabPop[index2 - 1];
+			tabInd[index2] = tabInd[index2 - 1];
 			index2--;
 			nbaction++;
 		}
-		table[index2] = varToSort;
+		tabPop[index2] = varToSortPop;
+		tabInd[index2] = varToSortInd;
 	}
 }
 
 void selection (groupe *population, groupe *parents) {
-	int i;
-	char tab[NBPOPULATION][2];
+	int iPop,iParent;
+	int tabPop[NBPOPULATION];
+	int tabInd[NBPOPULATION];
 
-	for (i = 0; i < population->nombre; ++i) {
-		calcul(&(population->membres[i]));
-		tab[i][0] = (population->membres[i]).score;
-		tab[1][i] = i;
+	for (iPop = 0; iPop < NBPOPULATION; ++iPop) {
+
+		tabPop[iPop] = (population->membres[iPop]).score;
+		tabInd[iPop] = iPop;
 	}
 
+	insertionSort (tabPop, tabInd, NBPOPULATION);
 
+	for ( iParent = 0; iParent < NBPARENTS; ++iParent) {
+		parents->membres[iParent] = population->membres[tabInd[iParent]];
 
+	}
 }
 
 int evaluation (groupe *population) {
-
+	int score;
+	int result = 1;
 	int i;
 	for (i = 0; i < population->nombre; ++i) {
-		if (((population->membres)->score) == 0) {
-			return 0;
+		calcul(&(population->membres[i]));
+		score = (population->membres[i]).score;
+		if (((population->membres[i]).score) == 0) {
+			result = 0;
 		}
 	}
-	return 1;
+	return result;
 }
 
 void generationAleatoire (groupe *population) {
 
-	int i = 0, j = 0;
+	int i, j;
 	srand(time(NULL));
 
-	for (i; i < population->nombre; i++) {
-		for (j; j < (NBGENE - 1); j++) {
+	for (i = 0; i < population->nombre; i++) {
+		for (j = 0; j < (NBGENE); j++) {
 			(population->membres[i]).gene[j] = rand() % 16;
 		}
 	}
 }
 
 void reproduction (groupe *population, groupe *parents) {
+	int indexParent1, indexParent2, indexCRISPER;
+	int i, j;
+
+	srand(time(NULL));
+	for(i=0; i<NBPOPULATION; i++) {
+		indexParent1 = rand() % NBPARENTS;
+		indexParent2 = rand() % NBPARENTS;
+		indexCRISPER = rand() % (NBGENE/2);
+		for(j = 0; j > NBGENE; j++) {
+			if(j <= indexCRISPER) {
+				population->membres[i].gene[j] = parents->membres[indexParent1].gene[j];
+			}
+			else{
+				population->membres[i].gene[j] = parents->membres[indexParent2].gene[j];
+			}
+		}
+
+		calcul(&(population->membres[i]));
+	}
+
 }
 
 void mutation (groupe *population) {

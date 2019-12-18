@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
 	population.nombre=NBPOPULATION; 
 	parents.nombre=NBPARENTS; 
 	
- 	while ((opt = getopt(argc, argv, "p:P:")) != -1) {
+ 	/*while ((opt = getopt(argc, argv, "p:P:")) != -1) {
                switch (opt) {
                case 'p':
                    population.nombre=atoi(optarg);
@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
                    fprintf(stderr, "Usage: %s [-p nbpopulation] [-P nbparents] \n",argv[0]);
                    exit(EXIT_FAILURE);
                }
-        }
+        }*/
 	// test et allocation mémoire. 
 	if (parents.nombre > population.nombre) exit(EXIT_FAILURE);  
 
@@ -39,9 +39,9 @@ int main(int argc, char *argv[])
 	calcul(&(population.membres[0]));
  
 	while (evaluation(&population)) {
-		selection(&population,&parents); 
-		reproduction(&population,&parents); 
-		mutation(&population); 
+		selection(&population,&parents);
+		reproduction(&population,&parents);
+		//mutation(&population);
 		nbgeneration++;
 	}
 	printf("Generation %d\n",nbgeneration);  

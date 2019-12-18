@@ -1,16 +1,16 @@
 #ifndef NBPOPULATION
-#define NBPOPULATION 1000 
+#define NBPOPULATION 10
 #endif 
 
 #ifndef NBPARENTS
-#define NBPARENTS 50 
+#define NBPARENTS 2
 #endif 
 
 #define MAX 2000000
 #define SEEK 666
 
 #ifndef NBGENE
-#define NBGENE 64
+#define NBGENE 10
 #endif
 
 #define END 666
@@ -34,6 +34,6 @@ int evaluation(groupe *population);
 void generationAleatoire(groupe *population); 
 void reproduction(groupe *population,groupe *parents); 
 void mutation (groupe *population);
-void insertionSort (int *table, int size);
+void insertionSort (int *tabPop, int *tabInd, int size);
 
 
