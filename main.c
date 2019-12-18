@@ -42,6 +42,8 @@ int main(int argc, char *argv[])
 		selection(&population,&parents);
 		reproduction(&population,&parents);
 		//mutation(&population);
+
+		printf("Generation %d\n",nbgeneration);
 		nbgeneration++;
 	}
 	printf("Generation %d\n",nbgeneration);  

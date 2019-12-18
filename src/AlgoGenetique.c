@@ -8,11 +8,11 @@
 #include "AlgoGenetique.h"
 
 
-#define lire(gene, i)    (i%2)?(gene[i/2]&0xF):(gene[i/2]>>4);
+//#define lire(gene, i)    (i%2)?(gene[i/2]&0xF):(gene[i/2]>>4);
 
-void affiche (unsigned char *gene) {
+/*void affiche (unsigned char *gene) {
 
-	char code[] = "+-*/";
+	char code[] = "+-";
 	int i = 0, res;
 	// the last gene is useless 
 	while (i < (NBGENE - 1)) {
@@ -26,7 +26,7 @@ void affiche (unsigned char *gene) {
 		i = i + 1;
 	}
 	printf("\n");
-}
+}*/
 
 void calcul (serpent *g) {
 	//--------------- traduction des operandes
@@ -67,7 +67,13 @@ void calcul (serpent *g) {
 			}
 		}
 	}
-	delimitation_parenthese[k] = END;
+	if(k%2 == 1) {
+		delimitation_parenthese[k] = (NBGENE-2);
+		delimitation_parenthese[k+1] = END;
+	}
+	else{
+		delimitation_parenthese[k] = END;
+	}
 
 	//------------- somme des termes
 	int parenthese = 0;
@@ -126,7 +132,7 @@ void calcul (serpent *g) {
 }
 
 
-void testCalcul () {
+/*void testCalcul () {
 
 	int i, expect;
 	serpent test[] = {
@@ -148,7 +154,7 @@ void testCalcul () {
 		calcul(&test[i]);
 		if (expect != test[i].score) { printf("error\n"); }
 	}
-}
+}*/
 
 void insertionSort (int *tabPop, int *tabInd, int size) {
 
@@ -193,16 +199,18 @@ void selection (groupe *population, groupe *parents) {
 }
 
 int evaluation (groupe *population) {
-	int score;
+	int score, somme;
 	int result = 1;
 	int i;
 	for (i = 0; i < population->nombre; ++i) {
 		calcul(&(population->membres[i]));
 		score = (population->membres[i]).score;
+		somme = somme + score;
 		if (((population->membres[i]).score) == 0) {
 			result = 0;
 		}
 	}
+	printf("moyenne : %d \n", somme/NBPOPULATION);
 	return result;
 }
 
@@ -223,6 +231,7 @@ void reproduction (groupe *population, groupe *parents) {
 	int i, j;
 
 	srand(time(NULL));
+
 	for(i=0; i<NBPOPULATION; i++) {
 		indexParent1 = rand() % NBPARENTS;
 		indexParent2 = rand() % NBPARENTS;

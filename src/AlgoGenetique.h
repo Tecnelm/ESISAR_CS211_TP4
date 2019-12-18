@@ -1,16 +1,16 @@
 #ifndef NBPOPULATION
-#define NBPOPULATION 10
+#define NBPOPULATION 1000
 #endif 
 
 #ifndef NBPARENTS
-#define NBPARENTS 2
+#define NBPARENTS 50
 #endif 
 
 #define MAX 2000000
 #define SEEK 666
 
 #ifndef NBGENE
-#define NBGENE 10
+#define NBGENE 32
 #endif
 
 #define END 666
