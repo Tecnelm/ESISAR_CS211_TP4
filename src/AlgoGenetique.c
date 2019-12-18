@@ -229,7 +229,7 @@ int evaluation (Groupe *population, int *moyenne, int *ecartT) {
 		}
 	}
 	moyValue /= population->nombre;
-	ecart = sqrt((1 / population->nombre) * somme - moyValue * moyValue);
+	//ecart = sqrt((1 / population->nombre) * somme - moyValue * moyValue);
 
 	*moyenne = moyValue;
 	*ecartT = ecart;

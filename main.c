@@ -45,7 +45,7 @@ int main (int argc, char *argv[]) {
 
 	while (evaluation(&population, &moyenne, &ecart)) {
 		selection(&population, &parents);
-		printf("Generation %d \nle meilleur score est : %d\n", nbgeneration, population.membres[0].score);
+		printf("Generation %d \nle meilleur score est : %d \nla moyenne est : %d \nl'ecart type est : %d \n", nbgeneration, population.membres[0].score, moyenne, ecart);
 		reproduction(&population, &parents);
 		mutation(&population);
 		nbgeneration++;
