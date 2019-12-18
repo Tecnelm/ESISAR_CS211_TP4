@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall
+CFLAGS = -Wall -lm
 OUT = out
 EXEC = TP4
 DEBUG = yes

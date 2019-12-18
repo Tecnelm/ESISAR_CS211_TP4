@@ -102,8 +102,7 @@ int calculScore (int *operator, int *operande) {/// fonction de calcul du score 
 					operande[idOperande2] = -1; ///suprime la valeur de l'operande de droite en y mettant la valeur -1 (valeur pas possible a atteindre par un gene dans un calcule
 					operator[i] = 0;/// remplace l'operateur actuel par un +
 					break;
-				case 2:
-					operande[idOperande1] = number1 * number2;
+				case 2: operande[idOperande1] = number1 * number2;
 					operande[idOperande2] = -1;
 					operator[i] = 0;
 					break;
@@ -211,7 +210,7 @@ void selection (Groupe *population, Groupe *parents) {
  * @param population
  * @return  0 si il y a un serpend malefique (score a 0) 1 sinon
  */
-int evaluation (Groupe *population) {
+int evaluation (Groupe *population, int *moyenne, int *ecartT) {
 
 	int result = 1;
 	int moyValue = 0;
@@ -230,7 +229,10 @@ int evaluation (Groupe *population) {
 		}
 	}
 	moyValue /= population->nombre;
-	//ecart = sqrt((1 / population->nombre) * somme - moyValue * moyValue);
+	ecart = sqrt((1 / population->nombre) * somme - moyValue * moyValue);
+
+	*moyenne = moyValue;
+	*ecartT = ecart;
 
 	return result;
 }
