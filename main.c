@@ -5,8 +5,6 @@
 #include "src/AlgoGenetique.h"
 
 
-#define TES
-
 
 #ifndef TEST
 
