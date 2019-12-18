@@ -49,12 +49,16 @@ int main (int argc, char *argv[]) {
 		mutation(&population);
 		nbgeneration++;
 	}
-
+	selection(&population, &parents);
 	printf("\nGeneration %d\n", nbgeneration);
-	printf("Serpent malefique !! voici son ADN : \n");
-	affiche(population.membres[0].gene);
+	printf("Serpent malefique !! voici son/leurs ADN : \n");
+
+	for(int i = 0 ; i<NBPOPULATION && !population.membres[i].score  ; i++  )
+		affiche(population.membres[i].gene);
+
 	free(population.membres);
 	free(parents.membres);
+
 
 }
 

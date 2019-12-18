@@ -28,12 +28,12 @@ $(OUT)/$(EXEC):$(OBJS) $(HEADER)
 	@mkdir -p $(OUT)/$(OBJDIR)
 	$(CC) $(CFLAGS) $(OBJS) -o $@
 
-$(OUT)/$(OBJDIR)/$(MAIN).o: $(MAINDIR)/$(MAIN).c
+$(OUT)/$(OBJDIR)/$(MAIN).o: $(MAINDIR)/$(MAIN).c $(HEADER)
 	@mkdir -p $(OUT)
 	@mkdir -p $(OUT)/$(OBJDIR)
-	$(CC) -o $@ -c $^ $(CFLAGS)
+	$(CC) -o $@ -c $< $(CFLAGS)
 
-$(OUT)/$(OBJDIR)/%.o: $(SRCDIR)/%.c $(SRCDIR)/%.h
+$(OUT)/$(OBJDIR)/%.o: $(SRCDIR)/%.c $(HEADER)
 	@mkdir -p $(OUT)
 	@mkdir -p $(OUT)/$(OBJDIR)
 	$(CC) -o $@ -c $< $(CFLAGS)
