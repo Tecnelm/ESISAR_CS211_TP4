@@ -4,6 +4,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <time.h>
+#include <math.h>
 #include "AlgoGenetique.h"
 
 
@@ -191,7 +192,7 @@ void selection (Groupe *population, Groupe *parents) {
 	int nbParent;
 	sort(population);
 
-	if (NBPARENTS >= NBPOPULATION) { /// dans le cas ou il y a plus de parent possible que de population
+	if (NBPARENTS <= NBPOPULATION) { /// dans le cas ou il y a plus de parent possible que de population
 		nbParent = NBPARENTS;
 	}
 	else {
@@ -229,7 +230,7 @@ int evaluation (Groupe *population) {
 		}
 	}
 	moyValue /= population->nombre;
-	ecart = sqrt((1 / population->nombre) * somme - moyValue * moyValue);
+	//ecart = sqrt((1 / population->nombre) * somme - moyValue * moyValue);
 
 	return result;
 }
