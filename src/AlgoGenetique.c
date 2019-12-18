@@ -32,8 +32,8 @@ void calcul (Serpent *g) { /// cette fonction est la fontion de calcul elle perm
 
 	int *operande, *operator; /// ces listes permettent de stocker les operateur et operande separement
 
-	if ((operande = malloc(sizeof(int) * NBGENE/2)) == NULL) { exit(EXIT_FAILURE); } ///allocation des tableau pour les operateurs et les operanrande
-	if ((operator = malloc(sizeof(int) * NBGENE/2 - 1)) == NULL) { exit(EXIT_FAILURE); }
+	if ((operande = malloc(sizeof(int) * NBGENE / 2)) == NULL) { exit(EXIT_FAILURE); } ///allocation des tableau pour les operateurs et les operanrande
+	if ((operator = malloc(sizeof(int) * NBGENE / 2 - 1)) == NULL) { exit(EXIT_FAILURE); }
 
 
 	fillOpe(operande, operator, g->gene); ///remplis les tableaux precedent
@@ -44,6 +44,26 @@ void calcul (Serpent *g) { /// cette fonction est la fontion de calcul elle perm
 
 	free(operande);
 	free(operator);
+}
+
+///cette fonction permet de remplir les tableau des operateur et des operande
+void fillOpe (int *operande, int *operator, unsigned const char *gene) {
+
+	int i = 0, res;
+	int operandeID = 0;
+	int operatorID = 0;
+
+	while (i < (NBGENE - 1)) {
+		res = (int) lire(gene, i);
+		if (i % 2) {
+			operator[operatorID++] = res % 4;
+		}
+		else {
+			operande[operandeID++] = res;
+		}
+		i++;
+	}
+
 }
 
 void affcalcul (int const *operande, int const *operator) { /// fonction de debug elle permet d'afficher le tableau operateur et operande de maniere ordonne
@@ -81,7 +101,8 @@ int calculScore (int *operator, int *operande) {/// fonction de calcul du score 
 					operande[idOperande2] = -1; ///suprime la valeur de l'operande de droite en y mettant la valeur -1 (valeur pas possible a atteindre par un gene dans un calcule
 					operator[i] = 0;/// remplace l'operateur actuel par un +
 					break;
-				case 2: operande[idOperande1] = number1 * number2;
+				case 2:
+					operande[idOperande1] = number1 * number2;
 					operande[idOperande2] = -1;
 					operator[i] = 0;
 					break;
@@ -103,7 +124,7 @@ int calculScore (int *operator, int *operande) {/// fonction de calcul du score 
 				break;
 		}
 	}
-	return abs(result - 666); ///retour du score
+	return abs(result - SEEK); ///retour du score
 
 }
 
@@ -134,26 +155,6 @@ int getSecondOperandID (int const *operande, int const theoricalSecond) {
 	return id;
 }
 
-///cette fonction permet de remplir les tableau des operateur et des operande
-void fillOpe (int *operande, int *operator, unsigned const char *gene) {
-
-	int i = 0, res;
-	int operandeID = 0;
-	int operatorID = 0;
-
-	while (i < (NBGENE - 1)) {
-		res = (int) lire(gene, i);
-		if (i % 2) {
-			operator[operatorID++] = res % 4;
-		}
-		else {
-			operande[operandeID++] = res;
-		}
-		i++;
-	}
-
-}
-
 
 void testCalcul () {
 
@@ -178,6 +179,7 @@ void testCalcul () {
 		if (expect != test[i].score) { printf("error\n"); }
 	}
 }
+
 /**
  * selection des meilleurs parents
  * on realise le trie de la population a l'aide d'un algorithme mergeSort puis rempli dans le tableau les meilleurs parents possible
@@ -189,10 +191,12 @@ void selection (Groupe *population, Groupe *parents) {
 	int nbParent;
 	sort(population);
 
-	if(NBPARENTS >= NBPOPULATION) /// dans le cas ou il y a plus de parent possible que de population
+	if (NBPARENTS >= NBPOPULATION) { /// dans le cas ou il y a plus de parent possible que de population
 		nbParent = NBPARENTS;
-	else
+	}
+	else {
 		nbParent = NBPOPULATION;
+	}
 
 
 	for (int i = 0; i < nbParent; i++) { ///affecte les parents dans leur tableau
