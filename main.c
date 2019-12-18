@@ -14,7 +14,6 @@
 int main (int argc, char *argv[]) {
 
 	int moyenne;
-	int ecart;
 
 	int opt, nbgeneration = 0;
 	Groupe population, parents;
@@ -43,9 +42,9 @@ int main (int argc, char *argv[]) {
 	// creation de la premiere génération 
 	generationAleatoire(&population);
 
-	while (evaluation(&population, &moyenne, &ecart)) {
+	while (evaluation(&population, &moyenne)) {
 		selection(&population, &parents);
-		printf("Generation %d \nle meilleur score est : %d \nla moyenne est : %d \nl'ecart type est : %d \n", nbgeneration, population.membres[0].score, moyenne, ecart);
+		printf("Generation %d \nle meilleur score est : %d \nla moyenne est : %d \n", nbgeneration, population.membres[0].score, moyenne);
 		reproduction(&population, &parents);
 		mutation(&population);
 		nbgeneration++;

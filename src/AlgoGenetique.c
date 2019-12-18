@@ -208,20 +208,17 @@ void selection (Groupe *population, Groupe *parents) {
 /**
  * evaluation de la population calcul le score des serpends ainsi que la moyenne des scores l'ecart type
  * @param population
- * @return  0 si il y a un serpend malefique (score a 0) 1 sinon
+ * @return  0 si il y a un serpent malefique (score a 0) 1 sinon
  */
-int evaluation (Groupe *population, int *moyenne, int *ecartT) {
+int evaluation (Groupe *population, int *moyenne) {
 
 	int result = 1;
 	int moyValue = 0;
-	int somme = 0;
-	int ecart;
 
 
 	for (int i = 0; i < population->nombre; i++) {
 		calcul(&(population->membres[i]));/// calcul des scores
 
-		somme += population->membres[i].score;/// somme tous les elements
 		moyValue += population->membres[i].score;
 
 		if (!(population->membres[i].score)) {/// verifie si ce n'est pas un serpent malefique
@@ -229,11 +226,7 @@ int evaluation (Groupe *population, int *moyenne, int *ecartT) {
 		}
 	}
 	moyValue /= population->nombre;
-	//ecart = sqrt((1 / population->nombre) * somme - moyValue * moyValue);
-
 	*moyenne = moyValue;
-	*ecartT = ecart;
-
 	return result;
 }
 

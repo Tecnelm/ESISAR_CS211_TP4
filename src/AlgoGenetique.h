@@ -42,7 +42,7 @@ void calcul (Serpent *g);
 
 void selection (Groupe *population, Groupe *parents);
 
-int evaluation (Groupe *population, int* moyen , int* ecartT);
+int evaluation (Groupe *population, int* moyen);
 void generationAleatoire (Groupe *population);
 
 void reproduction (Groupe *population, Groupe *parents);
