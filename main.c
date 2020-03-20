@@ -5,7 +5,6 @@
 #include "src/AlgoGenetique.h"
 
 
-
 #ifndef TEST
 
 int main (int argc, char *argv[]) {
@@ -50,12 +49,12 @@ int main (int argc, char *argv[]) {
 	printf("\nGeneration %d\n", nbgeneration);
 	printf("Serpent malefique !! voici son/leurs ADN : \n");
 
-	for(int i = 0 ; i<NBPOPULATION && !population.membres[i].score  ; i++  )
+	for (int i = 0; i < NBPOPULATION && !population.membres[i].score; i++) {
 		affiche(population.membres[i].gene);
+	}
 
 	free(population.membres);
 	free(parents.membres);
-
 
 }
 

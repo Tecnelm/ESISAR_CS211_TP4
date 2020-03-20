@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -Wall -lm
 OUT = out
 EXEC = TP4
-DEBUG = yes
+DEBUG = no
 TEST = no
 
 OBJDIR = obj
@@ -39,7 +39,7 @@ $(OUT)/$(OBJDIR)/%.o: $(SRCDIR)/%.c $(HEADER)
 	$(CC) -o $@ -c $< $(CFLAGS)
 
 
-.PHONY: clean mrproper run
+.PHONY: clean mrproper run debug
 
 clean:
 	@rm -rf $(OUT)/$(OBJDIR)/*.o
@@ -50,3 +50,5 @@ mrproper: clean
 run: $(OUT)/$(EXEC)
 	@./$(OUT)/$(EXEC)
 
+debug:
+	@make DEBUG="yes"
